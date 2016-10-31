@@ -39,17 +39,21 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+class lock 
+{
+	public static boolean finished = false;
+}
 
 public class Spider {
 
 	static Connection connect;
 	static Statement stmt;
-	static Object[] oarr;
+	static lock[] oarr;
 	public static void main(String[] args) throws ClientProtocolException, IOException, URISyntaxException, InterruptedException, SQLException {
 		// TODO Auto-generated method stub
 		connect = null;
 		stmt = null;
-		oarr = new Object[13];
+		oarr = new lock[13];
 		 try {
 		      connect = DriverManager.getConnection(
 		          "jdbc:mysql://localhost:3306/helloWorld","root","dx916562");
@@ -71,8 +75,8 @@ public class Spider {
 	    httpget.addHeader("Cookie","_gat=1; nsfw-click-load=off; gif-click-load=on; _ga=GA1.2.1861846600.1423061484");
 	    for(int i=1; i<=13; i++)
 		{
-			Thread.sleep(5000);
-			oarr[i-1] = new Object();
+			Thread.sleep(1000);
+			oarr[i-1] = new lock();
 			CloseableHttpResponse response = null;
 			try
 			{
@@ -111,10 +115,11 @@ public class Spider {
 		}
 	    for(int i=0; i<13; i++)
 	    {
-	    	Object o1 = oarr[i];
+	    	lock o1 = oarr[i];
 	    	synchronized(o1)
 	    	{
-	    		o1.wait();
+	    		if(!o1.finished)
+	    			o1.wait();
 	    	}
 	    }
 	    httpclient.close();

@@ -97,10 +97,11 @@ public class DownLoadT implements Runnable{
 				}
 	        }
 		}
-    	Object lock = Spider.oarr[picid-1];
-    	synchronized(lock)
+    	lock mlock = Spider.oarr[picid-1];
+    	synchronized(mlock)
     	{
-    		lock.notify();
+    		mlock.notify();
+    		lock.finished = true;
     	}
 	}	
 
