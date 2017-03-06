@@ -57,7 +57,7 @@ public class Spider {
 		 try {
 		      connect = DriverManager.getConnection(
 		          "jdbc:mysql://localhost:3306/helloWorld","root","dx916562");
-		           //Á¬½ÓURLÎª   jdbc:mysql//·şÎñÆ÷µØÖ·/Êı¾İ¿âÃû  £¬ºóÃæµÄ2¸ö²ÎÊı·Ö±ğÊÇµÇÂ½ÓÃ»§ÃûºÍÃÜÂë
+		           //è¿æ¥URLä¸º   jdbc:mysql//æœåŠ¡å™¨åœ°å€/æ•°æ®åº“å  ï¼Œåé¢çš„2ä¸ªå‚æ•°åˆ†åˆ«æ˜¯ç™»é™†ç”¨æˆ·åå’Œå¯†ç 
 
 		      System.out.println("Success connect Mysql server!");
 		      PreparedStatement pstmt = connect.prepareStatement("create table if not exists pictures(id int, name char(50))");
@@ -85,7 +85,7 @@ public class Spider {
 			//	System.out.println(httpget.getURI().toString());
 				response = httpclient.execute(httpget);
 				HttpEntity htmls = response.getEntity();
-				new DownLoadT(EntityUtils.toString(htmls), i, connect.createStatement()).run();
+				new Thread(new DownLoadT(EntityUtils.toString(htmls), i, connect.createStatement())).start();
 			}
 			catch(Exception e)
 			{
@@ -97,15 +97,15 @@ public class Spider {
 			}
 			
 		/*	try {
-			// »ñÈ¡ÏìÓ¦ÊµÌå  
+			// è·å–å“åº”å®ä½“  
 				HttpEntity entity = response.getEntity();
 				System.out.println("--------------------------------------");
-			// ´òÓ¡ÏìÓ¦×´Ì¬  
+			// æ‰“å°å“åº”çŠ¶æ€  
 				System.out.println(response.getStatusLine());
 			if (entity != null) {
-				// ´òÓ¡ÏìÓ¦ÄÚÈİ³¤¶È  
+				// æ‰“å°å“åº”å†…å®¹é•¿åº¦  
 				System.out.println("Response content length: " + entity.getContentLength());
-				// ´òÓ¡ÏìÓ¦ÄÚÈİ  
+				// æ‰“å°å“åº”å†…å®¹  
 				String pageContent = EntityUtils.toString(entity);
 			}
 			System.out.println("------------------------------------");
@@ -125,7 +125,7 @@ public class Spider {
 	    httpclient.close();
 	    stmt = connect.createStatement();
 		ResultSet rs = stmt.executeQuery("select * from pictures");
-		//user ÎªÄã±íµÄÃû³Æ
+		//user ä¸ºä½ è¡¨çš„åç§°
 		while (rs.next())
 		{
 			String tmp = "";
